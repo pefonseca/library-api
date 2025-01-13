@@ -4,8 +4,10 @@ import com.pefonseca.library.api.model.Author;
 import com.pefonseca.library.api.model.Book;
 import com.pefonseca.library.api.model.GenderBook;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -42,4 +44,14 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
 
     @Query(value = "select b from Book b where b.gender = ?1 order by ?2")
     List<Book> findByGenderAndOrdinationWithParamDistinct(GenderBook genderBook, String paramOrdination);
+
+    @Modifying
+    @Transactional
+    @Query(value = "delete from Book where gender = ?1")
+    void deleteByGender(GenderBook genderBook);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update Book set publicationDate = ?1") // update sem where kk
+    void updateDatePublication(LocalDate publicationDate);
 }
