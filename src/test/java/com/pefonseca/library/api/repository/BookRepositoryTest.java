@@ -1,6 +1,8 @@
 package com.pefonseca.library.api.repository;
 
+import com.pefonseca.library.api.model.Author;
 import com.pefonseca.library.api.model.Book;
+import com.pefonseca.library.api.model.GenderBook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @SpringBootTest
 public class BookRepositoryTest {
@@ -47,4 +50,17 @@ public class BookRepositoryTest {
         var result = repository.findAllBooksWithQuery();
         result.forEach(System.out::println);
     }
+
+//    @Test
+//    void createBookTest() {
+//        var author = authorRepository.findById(UUID.fromString("4660125a-3c13-4e81-8a00-cfffbd181b1c")).orElse(null);
+//
+//        Book book = new Book();
+//        book.setIsbn("isbn");
+//        book.setTitle("title");
+//        book.setAuthor(author);
+//        book.setPrice(BigDecimal.valueOf(1));
+//        book.setGender(GenderBook.MISTERIO);
+//        repository.save(book);
+//    }
 }

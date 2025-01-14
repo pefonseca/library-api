@@ -3,19 +3,24 @@ package com.pefonseca.library.api.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +30,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "author", schema = "public")
+@ToString(exclude = {"books"})
+@EntityListeners(AuditingEntityListener.class)
 public class Author {
 
     @Id
@@ -42,8 +49,19 @@ public class Author {
     private String nationality;
 
     @OneToMany(
-            mappedBy = "author",
-            cascade = CascadeType.ALL
+            mappedBy = "author", fetch = FetchType.LAZY
+//            cascade = CascadeType.ALL
     )
     private List<Book> books;
+
+    @CreatedDate
+    @Column(name = "created_date")
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_date")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "user_id")
+    private UUID userId;
 }
