@@ -20,7 +20,7 @@ public abstract class BookMapper {
     @Mapping(target = "author", expression = "java(getAuthorById(registrationDTO.idAuthor()))")
     public abstract Book toEntity(BookRegistrationDTO registrationDTO);
 
-    protected Author getAuthorById(UUID authorId) {
+    public Author getAuthorById(UUID authorId) {
         return repository.findById(authorId)
                 .orElseThrow(() -> new IllegalArgumentException("Author not found with ID: " + authorId));
     }
