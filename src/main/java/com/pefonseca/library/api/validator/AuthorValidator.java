@@ -3,18 +3,16 @@ package com.pefonseca.library.api.validator;
 import com.pefonseca.library.api.exceptions.DuplicateRecordException;
 import com.pefonseca.library.api.model.Author;
 import com.pefonseca.library.api.repository.AuthorRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class AuthorValidator {
 
     private final AuthorRepository authorRepository;
-
-    public AuthorValidator(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
 
     public void validate(Author author) {
         if(existAuthorRegistered(author)) {

@@ -6,6 +6,7 @@ import com.pefonseca.library.api.exceptions.DuplicateRecordException;
 import com.pefonseca.library.api.exceptions.OperationNotPermitted;
 import com.pefonseca.library.api.model.Author;
 import com.pefonseca.library.api.service.AuthorService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,19 +21,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/authors")
+@RequiredArgsConstructor
 public class AuthorController {
 
     private final AuthorService authorService;
-
-    public AuthorController(AuthorService authorService) {
-        this.authorService = authorService;
-    }
 
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody AuthorDTO authorDTO) {

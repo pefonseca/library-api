@@ -2,11 +2,11 @@ package com.pefonseca.library.api.service.impl;
 
 import com.pefonseca.library.api.exceptions.OperationNotPermitted;
 import com.pefonseca.library.api.model.Author;
-import com.pefonseca.library.api.model.Book;
 import com.pefonseca.library.api.repository.AuthorRepository;
 import com.pefonseca.library.api.repository.BookRepository;
 import com.pefonseca.library.api.service.AuthorService;
 import com.pefonseca.library.api.validator.AuthorValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +14,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
     private final AuthorValidator authorValidator;
     private final BookRepository bookRepository;
-
-    public AuthorServiceImpl(AuthorRepository authorRepository, AuthorValidator authorValidator, BookRepository bookRepository) {
-        this.authorRepository = authorRepository;
-        this.authorValidator = authorValidator;
-        this.bookRepository = bookRepository;
-    }
 
     @Override
     public Author save(Author author) {
