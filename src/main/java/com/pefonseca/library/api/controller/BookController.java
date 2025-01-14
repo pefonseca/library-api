@@ -9,6 +9,7 @@ import com.pefonseca.library.api.model.GenderBook;
 import com.pefonseca.library.api.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -60,13 +60,15 @@ public class BookController implements GenericController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ResultFindBookDTO>> findAll(@RequestParam(value = "isbn", required = false) String isbn,
+    public ResponseEntity<Page<ResultFindBookDTO>> findAll(@RequestParam(value = "isbn", required = false) String isbn,
                                                            @RequestParam(value = "title", required = false) String title,
                                                            @RequestParam(value = "nameAuthor", required = false) String nameAuthor,
                                                            @RequestParam(value = "gender", required = false) GenderBook gender,
-                                                           @RequestParam(value = "publicationDate", required = false) Integer publicationDate) {
-        var resultBooks = bookService.findBooks(isbn, title, nameAuthor, gender, publicationDate);
-        var resultListBooks = resultBooks.stream().map(bookMapper::toDTO).toList();
+                                                           @RequestParam(value = "publicationDate", required = false) Integer publicationDate,
+                                                           @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                           @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        Page<Book> resultBooks = bookService.findBooks(isbn, title, nameAuthor, gender, publicationDate, page, size);
+        Page<ResultFindBookDTO> resultListBooks = resultBooks.map(bookMapper::toDTO);
 
         return ResponseEntity.ok(resultListBooks);
     }

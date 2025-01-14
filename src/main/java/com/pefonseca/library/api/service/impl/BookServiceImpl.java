@@ -6,6 +6,9 @@ import com.pefonseca.library.api.repository.BookRepository;
 import com.pefonseca.library.api.service.BookService;
 import com.pefonseca.library.api.validator.BookValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +46,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findBooks(String isbn, String title, String nameAuthor, GenderBook gender, Integer publicationDate) {
+    public Page<Book> findBooks(String isbn, String title, String nameAuthor, GenderBook gender, Integer publicationDate, Integer page, Integer pageLimit) {
         Specification<Book> specs = Specification.where((root, query, cb) -> cb.conjunction());
 
         if(isbn != null) {
@@ -66,7 +69,9 @@ public class BookServiceImpl implements BookService {
             specs = specs.and(nameAuthorLike(nameAuthor));
         }
 
-        return repository.findAll(specs);
+        Pageable pageRequest = PageRequest.of(page, pageLimit);
+
+        return repository.findAll(specs, pageRequest);
     }
 
     @Override
