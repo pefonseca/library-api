@@ -13,4 +13,5 @@ public interface AuthorService {
     void delete(Author author);
     List<Author> findAll(String name, String nationality);
     void update(Author author);
+    List<Author> findAllByExample(String name, String nationality);
 }

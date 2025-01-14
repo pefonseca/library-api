@@ -2,6 +2,7 @@ package com.pefonseca.library.api.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -14,19 +15,28 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "book")
+@Table(name = "book", schema = "public")
+@ToString(exclude = "author")
+@EntityListeners(AuditingEntityListener.class)
 public class Book {
 
     @Id
@@ -34,7 +44,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "isbn", length = 20, nullable = false)
+    @Column(name = "isbn", length = 20, nullable = false, unique = true)
     private String isbn;
 
     @Column(name = "title", length = 150, nullable = false)
@@ -52,6 +62,16 @@ public class Book {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_author")
-    @ToString.Exclude
     private Author author;
+
+    @CreatedDate
+    @Column(name = "created_date")
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_date")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "user_id")
+    private UUID userId;
 }

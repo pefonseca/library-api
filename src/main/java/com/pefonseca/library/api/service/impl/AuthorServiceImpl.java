@@ -7,6 +7,8 @@ import com.pefonseca.library.api.repository.BookRepository;
 import com.pefonseca.library.api.service.AuthorService;
 import com.pefonseca.library.api.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,6 +61,23 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    public List<Author> findAllByExample(String name, String nationality) {
+        var author = new Author();
+        author.setName(name);
+        author.setNationality(nationality);
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                                               //.withIgnorePaths("id", "name", "nationality") ignora campos que não queira que sejá pesquisado.
+                                               .withIgnoreNullValues() // ignora valroes nulos
+                                               .withIgnoreCase() // ignora LOWER ou UPPER case
+                                               .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING); // qualquer parte do texto contenha essa string
+
+        Example<Author> example = Example.of(author, matcher);
+
+        return authorRepository.findAll(example);
+    }
+
+    @Override
     public void update(Author author) {
         if(author.getId() == null) {
             throw new IllegalArgumentException("Para atualizar é necessário que o autor esteja salvo na base.");
@@ -71,3 +90,4 @@ public class AuthorServiceImpl implements AuthorService {
         return bookRepository.existsByAuthor(author);
     }
 }
+
