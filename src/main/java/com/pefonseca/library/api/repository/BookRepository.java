@@ -3,6 +3,7 @@ package com.pefonseca.library.api.repository;
 import com.pefonseca.library.api.model.Author;
 import com.pefonseca.library.api.model.Book;
 import com.pefonseca.library.api.model.GenderBook;
+import org.hibernate.query.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,13 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface BookRepository extends JpaRepository<Book, UUID>, JpaSpecificationExecutor<Book> {
 
     List<Book> findByAuthor(Author author);
     List<Book> findByTitle(String title);
-    List<Book> findByIsbn(String isbn);
+    Optional<Book> findByIsbn(String isbn);
     List<Book> findByTitleAndPrice(String title, BigDecimal price);
     List<Book> findByTitleOrIsbn(String title, String isbn);
     List<Book> findByPublicationDateBetween(LocalDate start, LocalDate end);

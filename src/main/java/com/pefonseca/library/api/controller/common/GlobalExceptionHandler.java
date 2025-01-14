@@ -3,6 +3,7 @@ package com.pefonseca.library.api.controller.common;
 import com.pefonseca.library.api.controller.dto.ErrorProperty;
 import com.pefonseca.library.api.controller.dto.ErrorResponse;
 import com.pefonseca.library.api.exceptions.DuplicateRecordException;
+import com.pefonseca.library.api.exceptions.InvalidPropertyException;
 import com.pefonseca.library.api.exceptions.OperationNotPermitted;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -37,6 +38,14 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleOperationNotPermittedException(OperationNotPermitted ex) {
         return ErrorResponse.responseDefault(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidPropertyException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErrorResponse handleInvalidPropertyException(InvalidPropertyException ex) {
+        return new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Erro de validação",
+                List.of(new ErrorProperty(ex.getProperty(), ex.getMessage())));
     }
 
     @ExceptionHandler(RuntimeException.class)

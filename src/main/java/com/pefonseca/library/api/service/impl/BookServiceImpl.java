@@ -3,8 +3,8 @@ package com.pefonseca.library.api.service.impl;
 import com.pefonseca.library.api.model.Book;
 import com.pefonseca.library.api.model.GenderBook;
 import com.pefonseca.library.api.repository.BookRepository;
-import com.pefonseca.library.api.repository.specs.BookSpecs;
 import com.pefonseca.library.api.service.BookService;
+import com.pefonseca.library.api.validator.BookValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -24,9 +24,11 @@ import static com.pefonseca.library.api.repository.specs.BookSpecs.titleLike;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository repository;
+    private final BookValidator validator;
 
     @Override
     public Book save(Book book) {
+        validator.validate(book);
         return repository.save(book);
     }
 
@@ -73,6 +75,7 @@ public class BookServiceImpl implements BookService {
             throw new IllegalArgumentException("Para atualizar é necessário que o livro já esteja salvo na base de dados.");
         }
 
+        validator.validate(book);
         repository.save(book);
     }
 }
