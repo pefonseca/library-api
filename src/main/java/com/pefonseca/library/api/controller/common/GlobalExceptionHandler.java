@@ -6,12 +6,14 @@ import com.pefonseca.library.api.exceptions.DuplicateRecordException;
 import com.pefonseca.library.api.exceptions.InvalidPropertyException;
 import com.pefonseca.library.api.exceptions.OperationNotPermitted;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestControllerAdvice
@@ -48,11 +50,26 @@ public class GlobalExceptionHandler {
                 List.of(new ErrorProperty(ex.getProperty(), ex.getMessage())));
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ErrorResponse handleExceptionGeneric(Exception ex) {
-        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Ocorreu um erro inesperado. Entre em contato com a adminstração.",
-                List.of());
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleAccessDeniedException(AccessDeniedException ex) {
+        System.out.println(ex.getMessage());
+        return new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Acesso Negado", List.of());
     }
 
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
+        System.out.println(ex.getMessage());
+        return new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Acesso Negado", List.of());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleExceptionGeneric(Exception ex) {
+        System.out.println(ex.getMessage());
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Ocorreu um erro inesperado. Entre em contato com a administração.",
+                List.of());
+    }
 }

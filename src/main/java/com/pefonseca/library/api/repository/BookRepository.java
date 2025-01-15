@@ -3,7 +3,6 @@ package com.pefonseca.library.api.repository;
 import com.pefonseca.library.api.model.Author;
 import com.pefonseca.library.api.model.Book;
 import com.pefonseca.library.api.model.GenderBook;
-import org.hibernate.query.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;

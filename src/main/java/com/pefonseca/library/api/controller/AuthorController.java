@@ -1,15 +1,13 @@
 package com.pefonseca.library.api.controller;
 
 import com.pefonseca.library.api.controller.dto.AuthorDTO;
-import com.pefonseca.library.api.controller.dto.ErrorResponse;
 import com.pefonseca.library.api.controller.mappers.AuthorMapper;
-import com.pefonseca.library.api.exceptions.DuplicateRecordException;
-import com.pefonseca.library.api.exceptions.OperationNotPermitted;
 import com.pefonseca.library.api.model.Author;
 import com.pefonseca.library.api.service.AuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +32,7 @@ public class AuthorController implements GenericController{
     private final AuthorMapper authorMapper;
 
     @PostMapping
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> save(@Valid @RequestBody AuthorDTO authorDTO) {
         Author authorEntity = authorMapper.toEntity(authorDTO);
         authorService.save(authorEntity);
@@ -44,6 +43,7 @@ public class AuthorController implements GenericController{
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize(value = "hasAnyRole('OPERADOR','GERENTE')")
     public ResponseEntity<AuthorDTO> findById(@PathVariable(value = "id") String id) {
         var authorId = UUID.fromString(id);
 
@@ -54,6 +54,7 @@ public class AuthorController implements GenericController{
     }
 
     @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> delete(@PathVariable(value = "id") String id) {
         var authorId = UUID.fromString(id);
         Optional<Author> authorOptional = authorService.findById(authorId);
@@ -66,6 +67,7 @@ public class AuthorController implements GenericController{
     }
 
     @GetMapping
+    @PreAuthorize(value = "hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<List<AuthorDTO>> findAll(@RequestParam(value = "name", required = false) String name,
                                                    @RequestParam(value = "nationality", required = false) String nationality) {
 
@@ -77,8 +79,9 @@ public class AuthorController implements GenericController{
     }
 
     @PutMapping(value = "/{id}")
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> update(@PathVariable("id") String id,
-                                         @Valid @RequestBody AuthorDTO authorDTO) {
+                                       @Valid @RequestBody AuthorDTO authorDTO) {
         var authorId = UUID.fromString(id);
         Optional<Author> authorOptional = authorService.findById(authorId);
         if (authorOptional.isEmpty()) {
