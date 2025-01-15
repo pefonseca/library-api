@@ -2,12 +2,17 @@ package com.pefonseca.library.api.controller;
 
 import com.pefonseca.library.api.controller.dto.AuthorDTO;
 import com.pefonseca.library.api.controller.mappers.AuthorMapper;
+import com.pefonseca.library.api.model.AuthUser;
 import com.pefonseca.library.api.model.Author;
+import com.pefonseca.library.api.security.SecurityService;
 import com.pefonseca.library.api.service.AuthorService;
+import com.pefonseca.library.api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +34,7 @@ import java.util.UUID;
 public class AuthorController implements GenericController{
 
     private final AuthorService authorService;
+    private final SecurityService securityService;
     private final AuthorMapper authorMapper;
 
     @PostMapping

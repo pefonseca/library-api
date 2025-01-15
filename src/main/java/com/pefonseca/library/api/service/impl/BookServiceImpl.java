@@ -1,8 +1,10 @@
 package com.pefonseca.library.api.service.impl;
 
+import com.pefonseca.library.api.model.AuthUser;
 import com.pefonseca.library.api.model.Book;
 import com.pefonseca.library.api.model.GenderBook;
 import com.pefonseca.library.api.repository.BookRepository;
+import com.pefonseca.library.api.security.SecurityService;
 import com.pefonseca.library.api.service.BookService;
 import com.pefonseca.library.api.validator.BookValidator;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +29,13 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository repository;
     private final BookValidator validator;
+    private final SecurityService securityService;
 
     @Override
     public Book save(Book book) {
         validator.validate(book);
+        AuthUser user = securityService.findUserAuthenticated();
+        book.setUser(user);
         return repository.save(book);
     }
 

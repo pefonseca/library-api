@@ -1,9 +1,11 @@
 package com.pefonseca.library.api.service.impl;
 
 import com.pefonseca.library.api.exceptions.OperationNotPermitted;
+import com.pefonseca.library.api.model.AuthUser;
 import com.pefonseca.library.api.model.Author;
 import com.pefonseca.library.api.repository.AuthorRepository;
 import com.pefonseca.library.api.repository.BookRepository;
+import com.pefonseca.library.api.security.SecurityService;
 import com.pefonseca.library.api.service.AuthorService;
 import com.pefonseca.library.api.validator.AuthorValidator;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +24,13 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
     private final AuthorValidator authorValidator;
     private final BookRepository bookRepository;
+    private final SecurityService securityService;
 
     @Override
     public Author save(Author author) {
         authorValidator.validate(author);
+        AuthUser user = securityService.findUserAuthenticated();
+        author.setUser(user);
         return authorRepository.save(author);
     }
 
