@@ -3,6 +3,7 @@ package com.pefonseca.library.api.security;
 import com.pefonseca.library.api.model.AuthUser;
 import com.pefonseca.library.api.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +21,10 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        return null;
+        return User.builder()
+                   .username(user.getLogin())
+                   .password(user.getPassword())
+                   .roles(user.getRoles().toArray(new String[user.getRoles().size()]))
+                   .build();
     }
 }

@@ -1,5 +1,7 @@
 package com.pefonseca.library.api.config;
 
+import com.pefonseca.library.api.security.CustomUserDetailsService;
+import com.pefonseca.library.api.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -43,20 +45,23 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-        UserDetails user1 = User.builder()
-                                .username("user")
-                                .password(encoder.encode("password"))
-                                .roles("USER")
-                                .build();
+    public UserDetailsService userDetailsService(UserService userService) {
+//            UserDetails user1 = User.builder()
+//                                    .username("user")
+//                                    .password(encoder.encode("password"))
+//                                    .roles("USER")
+//                                    .build();
+//
+//            UserDetails user2 = User.builder()
+//                                    .username("Admin")
+//                                    .password(encoder.encode("password"))
+//                                    .roles("ADMIN")
+//                                    .build();
+//
+//            return new InMemoryUserDetailsManager(user1, user2);
 
-        UserDetails user2 = User.builder()
-                                .username("Admin")
-                                .password(encoder.encode("password"))
-                                .roles("ADMIN")
-                                .build();
+        return new CustomUserDetailsService(userService);
 
-        return new InMemoryUserDetailsManager(user1, user2);
     }
 
 }
