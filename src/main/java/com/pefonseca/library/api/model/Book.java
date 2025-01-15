@@ -34,7 +34,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "book", schema = "public")
+@Table(name = "tb_book", schema = "public")
 @ToString(exclude = "author")
 @EntityListeners(AuditingEntityListener.class)
 public class Book {
