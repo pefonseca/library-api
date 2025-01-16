@@ -25,14 +25,16 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults()) // auth basico com httpBasic
-                .formLogin(configurer -> {
-                    configurer.loginPage("/login").permitAll();
-                }) // configurando login alternativo
+//                .formLogin(configurer -> {
+//                    configurer.loginPage("/login").permitAll();
+//                }) // configurando login alternativo
+                .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/login/**").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/users/**").permitAll();
                     authorize.anyRequest().authenticated();
                 })
+                .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 
@@ -41,7 +43,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(10);
     }
 
-    @Bean
     public UserDetailsService userDetailsService(UserService userService) {
 //            UserDetails user1 = User.builder()
 //                                    .username("user")
