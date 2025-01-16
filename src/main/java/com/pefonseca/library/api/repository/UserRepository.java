@@ -7,4 +7,5 @@ public interface UserRepository extends JpaRepository<AuthUser, Long> {
 
     AuthUser findByLogin(String login);
 
+    AuthUser findByEmail(String email);
 }

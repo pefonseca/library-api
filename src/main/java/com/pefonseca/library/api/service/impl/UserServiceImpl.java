@@ -26,4 +26,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByLogin(login);
     }
 
+    @Override
+    public AuthUser findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 }

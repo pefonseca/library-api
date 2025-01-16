@@ -3,6 +3,7 @@ package com.pefonseca.library.api.controller;
 import com.pefonseca.library.api.controller.dto.UserDTO;
 import com.pefonseca.library.api.controller.mappers.UserMapper;
 import com.pefonseca.library.api.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ public class AuthUserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@RequestBody UserDTO user) {
+    public void save(@Valid @RequestBody UserDTO user) {
         var userDB = userMapper.toEntity(user);
         userService.save(userDB);
     }

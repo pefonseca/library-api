@@ -6,5 +6,6 @@ public interface UserService {
 
     void save(AuthUser user);
     AuthUser findByLogin(String login);
+    AuthUser findByEmail(String email);
 
 }
