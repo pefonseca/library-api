@@ -27,9 +27,9 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults()) // auth basico com httpBasic
-//                .formLogin(configurer -> {
-//                    configurer.loginPage("/login").permitAll();
-//                }) // configurando login alternativo
+                .formLogin(configurer -> {
+                    configurer.loginPage("/login").permitAll();
+                }) // configurando login alternativo
                 .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/login/**").permitAll();
@@ -37,7 +37,9 @@ public class SecurityConfig {
                     authorize.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> {
-                    oauth2.successHandler(successHandler);
+                    oauth2
+                            .loginPage("/login")
+                            .successHandler(successHandler);
                 })
                 .build();
     }
