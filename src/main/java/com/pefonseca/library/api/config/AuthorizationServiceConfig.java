@@ -19,7 +19,7 @@ import java.time.Duration;
 
 @Configuration
 @EnableWebSecurity
-public class AuthorizationServiceConfiguration {
+public class AuthorizationServiceConfig {
 
     @Bean
     @Order(1)
