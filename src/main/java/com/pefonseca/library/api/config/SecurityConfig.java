@@ -1,8 +1,6 @@
 package com.pefonseca.library.api.config;
 
-import com.pefonseca.library.api.security.CustomUserDetailsService;
 import com.pefonseca.library.api.security.LoginSocialSuccessHandler;
-import com.pefonseca.library.api.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,9 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -42,30 +37,6 @@ public class SecurityConfig {
                             .successHandler(successHandler);
                 })
                 .build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
-
-    public UserDetailsService userDetailsService(UserService userService) {
-//            UserDetails user1 = User.builder()
-//                                    .username("user")
-//                                    .password(encoder.encode("password"))
-//                                    .roles("USER")
-//                                    .build();
-//
-//            UserDetails user2 = User.builder()
-//                                    .username("Admin")
-//                                    .password(encoder.encode("password"))
-//                                    .roles("ADMIN")
-//                                    .build();
-//
-//            return new InMemoryUserDetailsManager(user1, user2);
-
-        return new CustomUserDetailsService(userService);
-
     }
 
     @Bean
